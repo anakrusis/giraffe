@@ -34,14 +34,14 @@ class GuiElement {
 		
 		// referential properties
 		this.parent = parent;
-		this.children = [];
+		this.children = {};
 		
-		if (parent){
+/* 		if (parent){
 			parent.appendElement( this );
 		}else{
 			GIRAFFE.elements.push(this);
 		}
-		GIRAFFE.allElements.push(this);
+		GIRAFFE.allElements.push(this); */
 	}
 	
 	// update() contains most of the auto positioning of text boxes and things, it is an outer layer to the 
@@ -52,8 +52,8 @@ class GuiElement {
 			this.onUpdate();
 		}
 		
-		for (var i = 0; i < this.children.length; i++){
-			var e  = this.children[i];
+		for (var key in this.children){
+			var e  = this.children[key];
 			e.update();
 		}
 		
@@ -67,13 +67,14 @@ class GuiElement {
 					this.dispx = p.dispx + p.padding;
 					this.dispy = p.dispy + p.padding;
 					
-					for (var i = 0; i < p.children.length; i++){
-						
-						if (p.children[i].visible){
-							if (p.children[i] == this){
+					var p_children_len = Object.keys(p.children).length;
+					
+					for (var key in p.children){
+						if (p.children[key].visible){
+							if (p.children[key] == this){
 								break;
 							}else{
-								this.dispx += p.children[i].dispwidth + p.padding;
+								this.dispx += p.children[key].dispwidth + p.padding;
 							}
 						}
 					}
@@ -112,9 +113,9 @@ class GuiElement {
 		if (this.autosize){
 			var minx = 100000; var miny = 100000;
 			var maxx = 0; var maxy = 0;
-			for (var i = 0; i < this.children.length; i++){
+			for (var key in this.children){
 				
-				var c = this.children[i];
+				var c = this.children[key];
 				if (c.visible && !c.staticposition){
 					if (c.dispx + c.dispwidth > maxx){
 						maxx = c.dispx + c.dispwidth;
@@ -219,14 +220,14 @@ class GuiElement {
 			e.click(x,y);
 		} 
 		
-		if (bypassGameClick){ return false; }
+		if (GIRAFFE.bypassGameClick){ return false; }
 		
 		if (this.visible && (this.active || this.bypassActiveForClicks)){
 			if (x > this.dispx * GIRAFFE.GUI_SCALE && x < (this.dispx + this.dispwidth) * GIRAFFE.GUI_SCALE
 			 && y > this.dispy * GIRAFFE.GUI_SCALE && y < (this.dispy + this.dispheight)* GIRAFFE.GUI_SCALE ){
 			
 				this.onClick(); 
-				bypassGameClick = true;
+				GIRAFFE.bypassGameClick = true;
 			}
 		}
 	}
@@ -315,8 +316,8 @@ class GuiElement {
 			this.onRender();
 		}
 		
-		for (var i = 0; i < this.children.length; i++){
-			var e  = this.children[i];
+		for (var key in this.children){
+			var e  = this.children[key];
 			e.render();
 		}
 
@@ -330,8 +331,8 @@ class GuiElement {
 	// Likewise for the following methods
 	show(){
 		this.visible = true;
-		for (var i = 0; i < this.children.length; i++){
-			var e  = this.children[i];
+		for (var key in this.children){
+			var e  = this.children[key];
 			e.show();
 		}
 		//this.onUpdate();
@@ -344,8 +345,8 @@ class GuiElement {
 	
 	hide(){
 		this.visible = false;
-		for (var i = 0; i < this.children.length; i++){
-			var e  = this.children[i];
+		for (var key in this.children){
+			var e  = this.children[key];
 			e.hide();
 		}
 	}
