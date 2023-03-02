@@ -1,15 +1,18 @@
-{
-	"GROUP_TEST": {
+[
+	{
 		"autosize": true,
 		"autopos": "top",
-		"children": {
-		
-			"DIV1": {
+		"children": [
+			{
 				"width": 500,
 				"height": 100,
-				"text": "Hello! This is a test for the GIRAFFE graphics interface library!"
+				"text": "Hello! This is a test for the GIRAFFE graphics interface library!",
+				"name": "div1"
 			}
 		
-		}
+		],
+		"name": "GROUP_TEST",
+		"x": 100,
+		"y": 100
 	}
-}
+]

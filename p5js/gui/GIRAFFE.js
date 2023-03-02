@@ -2,8 +2,8 @@
 
 class GIRAFFE {
 	static elements    = []; // outermost parent elements here, child elements contained within..
-	static allElements = [];
-	
+	static allElements = {}; // with this object you can access any element by its *Unique* name
+ 	
 	// key and touch handling
 	static shiftDown = false;
 	static bypassGameClick = false; // gui boolean for when a gui element is clicked, not to trigger anything in game world
@@ -26,8 +26,9 @@ class GIRAFFE {
 		
 		for (var k in elmobj) {
 			var o = this.reviveElement( elmobj[k] );
-			this.elements[k] = o;
-			this.allElements[k] = o;
+			print(o);
+			this.elements.push( o ); 
+			 //this.allElements.push( o );
 		}
 	}
 	
@@ -41,6 +42,12 @@ class GIRAFFE {
 		for (var k in e) {
 			newobj[k] = e[k]
 		}
+		
+		// object is placed in the list of all elements according to its name
+		// TODO if no name specified, generate a name
+		// TODO make the name a path concatenating all parent names so that collisions can be avoided
+		this.allElements[ newobj.name ] = newobj;
+		
 		for (var k in newobj.children){
 			var newchild = this.reviveElement( newobj.children[k] );
 			newobj.children[k] = newchild;
@@ -88,9 +95,9 @@ class GIRAFFE {
 			this.bypassGameClick = false;
 		}
 		
-		for (var key in this.elements){
-			var e = this.allElements[key];
-			if (e.active || e == GROUP_HOTBAR){
+		for (var k in this.allElements){
+			var e = this.allElements[k];
+			if (e.active){
 				e.update();
 			}
 		}
@@ -104,10 +111,8 @@ class GIRAFFE {
 	
 	static onClick(x,y){
 		this.selectedTextEntry = null;
-		// the original version of this iterated backwards so that the top rendering would be prioritized.
-		// perhaps a priority layering system can be implemented.
-		for (var key in this.elements){
-			var e = this.elements[key];
+		for (var i = this.elements.length - 1; i >= 0; i--){
+			var e = this.elements[i];
 			if ((e.active || e.bypassActiveForClicks) && !e.parent){
 				e.click(x,y);
 			}
@@ -120,9 +125,8 @@ class GIRAFFE {
 		fill(0);
 		stroke(255);
 		
-		for (var key in this.elements){
-			print(key);
-			var e = this.elements[key];
+		for (var i = 0; i < this.elements.length; i++){
+			var e = this.elements[i];
 			e.render();
 		}
 		

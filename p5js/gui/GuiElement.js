@@ -34,14 +34,15 @@ class GuiElement {
 		
 		// referential properties
 		this.parent = parent;
-		this.children = {};
+		this.children = [];
 		
 /* 		if (parent){
 			parent.appendElement( this );
 		}else{
 			GIRAFFE.elements.push(this);
 		}
-		GIRAFFE.allElements.push(this); */
+		 */
+		//GIRAFFE.allElements.push(this);
 	}
 	
 	// update() contains most of the auto positioning of text boxes and things, it is an outer layer to the 
@@ -52,8 +53,8 @@ class GuiElement {
 			this.onUpdate();
 		}
 		
-		for (var key in this.children){
-			var e  = this.children[key];
+		for (var i = 0; i < this.children.length; i++){
+			var e  = this.children[i];
 			e.update();
 		}
 		
@@ -67,14 +68,13 @@ class GuiElement {
 					this.dispx = p.dispx + p.padding;
 					this.dispy = p.dispy + p.padding;
 					
-					var p_children_len = Object.keys(p.children).length;
-					
-					for (var key in p.children){
-						if (p.children[key].visible){
-							if (p.children[key] == this){
+					for (var i = 0; i < p.children.length; i++){
+						
+						if (p.children[i].visible){
+							if (p.children[i] == this){
 								break;
 							}else{
-								this.dispx += p.children[key].dispwidth + p.padding;
+								this.dispx += p.children[i].dispwidth + p.padding;
 							}
 						}
 					}
@@ -113,9 +113,9 @@ class GuiElement {
 		if (this.autosize){
 			var minx = 100000; var miny = 100000;
 			var maxx = 0; var maxy = 0;
-			for (var key in this.children){
+			for (var i = 0; i < this.children.length; i++){
 				
-				var c = this.children[key];
+				var c = this.children[i];
 				if (c.visible && !c.staticposition){
 					if (c.dispx + c.dispwidth > maxx){
 						maxx = c.dispx + c.dispwidth;
@@ -316,8 +316,8 @@ class GuiElement {
 			this.onRender();
 		}
 		
-		for (var key in this.children){
-			var e  = this.children[key];
+		for (var i = 0; i < this.children.length; i++){
+			var e  = this.children[i];
 			e.render();
 		}
 
@@ -331,8 +331,8 @@ class GuiElement {
 	// Likewise for the following methods
 	show(){
 		this.visible = true;
-		for (var key in this.children){
-			var e  = this.children[key];
+		for (var i = 0; i < this.children.length; i++){
+			var e  = this.children[i];
 			e.show();
 		}
 		//this.onUpdate();
@@ -345,8 +345,8 @@ class GuiElement {
 	
 	hide(){
 		this.visible = false;
-		for (var key in this.children){
-			var e  = this.children[key];
+		for (var i = 0; i < this.children.length; i++){
+			var e  = this.children[i];
 			e.hide();
 		}
 	}
